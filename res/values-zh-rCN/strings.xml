@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">看我上过的WiFi</string>
+    <string name="action_settings">设置</string>
+    <string name="action_about">关于</string>
+    <string name="noroot">讨厌~您的设备没有root，不能用人家了</string>
+    <string name="nopwd">无密码</string>
+    <string name="share_wifi_psk">分享WiFi密码</string>
+    <string name="wifi_psk_is">这个WiFi的密码是</string>
+	<string name="share">分享</string>
+	<string name="mustroot">必须得root才能看呐，亲！</string>
+	<string name="mustauth">你得允许root授权呐，亲！</string>
+	<string name="adexit">点击广告是您对我最大的肯定,连按两次退出</string>
+	<string name="ad">点击广告是您对我最大的肯定!</string>
+	<string name="click1">再敲一下返回键退出</string>
+	<string name="recommend">推荐</string>
+	<string name="description">分享到朋友圈可以去广告我会乱说吗？</string>
+	<string name="text">还记得大明湖畔你上过的WiFi吗？本安卓app可以查看手机连接过的WiFi密码并分享。过年串门，妈妈再也不用担心熊孩子问WiFi密码了！</string>
+	<string name="share_success">分享成功,重新打开看弹屏广告木有了T_T</string>
+	<string name="share_fail">分享失败,咋回事捏</string>
+	<string name="donate_success">感谢土豪的支持，广告彻底木有了!</string>
+	
+	<string name="about">作者:3sbstudio\n邮箱:sbstudio@163.com</string>	
+    
+</resources>

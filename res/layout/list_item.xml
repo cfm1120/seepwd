@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/ssidTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        />
+    <TextView
+        android:id="@+id/pskTv"
+        android:layout_below="@+id/ssidTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#888"
+         />
+	<View  
+	    android:id="@+id/divider"
+	    android:layout_toLeftOf="@+id/shareBtn"
+	    android:layout_marginRight="2dp"
+		android:layout_width="1dp"  
+		android:layout_height="35dp" 
+		android:layout_centerVertical="true"
+		android:background="?android:attr/listDivider"
+	/>
+    <Button
+        android:id="@+id/shareBtn"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="19sp"
+        android:text="@string/share"
+        android:paddingRight="5dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/button_share"
+        
+         />
+</RelativeLayout>
