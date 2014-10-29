@@ -14,7 +14,12 @@
     <string name="adexit">To click ads is the best affirmation to my work.Quit On Double Click</string>
 	<string name="ad">To click ads is the best affirmation to my work!</string>
 	<string name="click1">One more click to exit</string>
+	
 	<string name="recommend">Recommend</string>
+	<string name="wx">WeChat</string>
+	<string name="search">Search</string>
+	<string name="queryHints">Pls input WiFi name</string>
+	
 	<string name="description">Forget your WiFi password?</string>
 	<string name="text">Forget your WiFi password?This Android app shows your WiFi password and easy to share with your friends.To Download at http://t.cn/8FtmGTS</string>
 	<string name="share_success">Share successfully</string>

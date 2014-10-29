@@ -1,11 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item android:id="@+id/menu_search" 
-            android:title="Search" 
-            android:showAsAction="ifRoom"  
+            android:title="@string/search" 
+            android:showAsAction="ifRoom"
             android:actionViewClass="android.widget.SearchView"  />
     <item android:id="@+id/menu_wx" 
-            android:title="WeChat" 
+            android:title="@string/wx" 
             android:showAsAction="ifRoom" 
             android:icon="@drawable/wx" 
               />

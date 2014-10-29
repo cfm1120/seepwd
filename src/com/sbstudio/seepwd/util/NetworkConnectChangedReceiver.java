@@ -47,33 +47,32 @@ public class NetworkConnectChangedReceiver extends BroadcastReceiver {
                 Log.e("H3c", "isConnected:" + isConnected);
                 if (isConnected) {
                     
-//                    connectingSsid=networkInfo.getExtraInfo().substring(1, networkInfo.getExtraInfo().length()-1);
                    WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
                   WifiInfo info = wifiMgr.getConnectionInfo();
                   connectingSsid = info != null ? info.getSSID().replace("\"", "") : null;
                                         Log.e("SSID:", connectingSsid);
                                         
-                    if(context instanceof MainActivity &&MainActivity.dataList.size()>5)
-                    {
-                        MainActivity act=(MainActivity) context;
-                        act.connectingSsid=connectingSsid;
-                        
-                        for (Network network : MainActivity.dataList) {
-                            if(connectingSsid.equals(network.getSsid()))
-                            {
-                                //先把正在连接的删掉，再加到List合适的位置
-                                MainActivity.dataList.remove(network);
-                                int perfectPos=4;
-                                MainActivity.dataList.add(perfectPos, network);
-                                break;
-                            }
-                        }
-                        
-                        
-                        if(null!=act.getNetworkAdapter())
-                            act.getNetworkAdapter().notifyDataSetChanged();
-                    }
                 } 
+                if(context instanceof MainActivity &&MainActivity.dataList.size()>5)
+                {
+                    MainActivity act=(MainActivity) context;
+                    act.getNetworkAdapter().setConnectingSsid(connectingSsid);
+                    
+                    for (Network network : MainActivity.dataList) {
+                        if(connectingSsid.equals(network.getSsid()))
+                        {
+                            //先把正在连接的删掉，再加到List合适的位置
+                            MainActivity.dataList.remove(network);
+                            int perfectPos=4;
+                            MainActivity.dataList.add(perfectPos, network);
+                            break;
+                        }
+                    }
+                    
+                    
+                    if(null!=act.getNetworkAdapter())
+                        act.getNetworkAdapter().notifyDataSetChanged();
+                }
             }
         }
         

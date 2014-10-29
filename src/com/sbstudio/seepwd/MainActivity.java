@@ -5,24 +5,19 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.SearchView.OnCloseListener;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +25,7 @@ import com.baidu.mobads.IconsAd;
 import com.baidu.mobads.InterstitialAd;
 import com.baidu.mobads.InterstitialAdListener;
 import com.sbstudio.seepwd.entity.Network;
+import com.sbstudio.seepwd.util.NetworkAdapter;
 import com.sbstudio.seepwd.util.NetworkConnectChangedReceiver;
 import com.sbstudio.seepwd.util.Parser;
 import com.sbstudio.seepwd.util.RootCmd;
@@ -53,8 +49,8 @@ public class MainActivity extends Activity {
     String out = null;
     TextView tv;
     private ListView lv;
+    private SearchView searchView;
     private NetworkAdapter networkAdapter;
-    Intent intent;
     Dialog alertDialog;
     
     private long mExitTime;
@@ -70,7 +66,7 @@ public class MainActivity extends Activity {
     
 
     //当前连接的wifi
-    public String connectingSsid;
+//    public String connectingSsid;
     //广播接收
     private NetworkConnectChangedReceiver receiver;
     
@@ -110,9 +106,7 @@ public class MainActivity extends Activity {
         tv=(TextView) findViewById(R.id.tv);
         lv=(ListView) findViewById(R.id.networkLv);
         dataList=new ArrayList<Network>();
-        intent=new Intent(Intent.ACTION_SEND);   
-        intent.setType("text/plain");  //分享的数据类型 
-        intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.share_wifi_psk));  //主题 
+        
 
         
         //获取root并得到wifi列表
@@ -149,7 +143,7 @@ public class MainActivity extends Activity {
                    tv.setVisibility(View.VISIBLE);//break;
                 }
                dataList=Parser.getNetworks(out);
-               networkAdapter=new NetworkAdapter();
+               networkAdapter=new NetworkAdapter(this,dataList);
                lv.setAdapter(networkAdapter);
                //自动更新
                if(NetworkDetector.detect(act))
@@ -292,10 +286,36 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        //wx图标已改为xml配置
 //        MenuItem add=menu.add(0,0,0,R.string.recommend).setIcon(R.drawable.wx);
 //        add.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         
-        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView.setQueryHint(getResources().getString(R.string.queryHints));
+        searchView.setOnQueryTextListener(new OnQueryTextListener() {
+            
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+            
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //监听输入框的文字变化...
+//                Toast.makeText(getApplicationContext(), newText, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+        searchView.setOnCloseListener(new OnCloseListener() {
+            
+            @Override
+            public boolean onClose() {
+                Toast.makeText(getApplicationContext(), "closed~", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+        
         return true;
     }
     /***
@@ -329,94 +349,7 @@ public class MainActivity extends Activity {
 
 
     public static List<Network> dataList;
-    public class NetworkAdapter extends BaseAdapter{
-
-        @Override
-        public int getCount() {
-            return dataList.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return dataList.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-          //使用convertView和ViewHolder提升listview性能
-            ViewHolder holder = null;
-            if(convertView == null){
-                LayoutInflater inflater = getLayoutInflater();
-                convertView = inflater.inflate(R.layout.list_item, null);
-            }
-            else
-            {
-                holder  = (ViewHolder) convertView.getTag() ;
-            }
-             if(holder==null){
-                 holder = new ViewHolder();
-                 holder.ssidTv=(TextView) convertView.findViewById(R.id.ssidTv);
-                 holder.pskTv=(TextView) convertView.findViewById(R.id.pskTv);
-                 holder.shareBtn=(Button) convertView.findViewById(R.id.shareBtn);
-                 holder.divider=convertView.findViewById(R.id.divider);
-                    
-                    convertView.setTag(holder) ;
-             }
-             
-             holder.shareBtn.setTag(position);//记录当前位置，分享按钮那里取出来
-             holder.ssidTv.setText(dataList.get(position).getSsid());
-             //如果密码为空
-             if(dataList.get(position).getPsk()==null)
-             {
-                 holder.pskTv.setText(getResources().getString(R.string.nopwd));
-                 holder.shareBtn.setVisibility(View.GONE);
-                 holder.divider.setVisibility(View.GONE);
-                 
-             }
-             else {
-                 holder.pskTv.setText(dataList.get(position).getPsk());
-                 holder.shareBtn.setVisibility(View.VISIBLE);
-                 holder.divider.setVisibility(View.VISIBLE);
-             }
-             
-             //如果当前位置为正在连接的
-             if(dataList.get(position).getSsid().equals(connectingSsid))
-             {
-                 holder.shareBtn.setTextColor(Color.WHITE);
-                 holder.shareBtn.setBackgroundResource(R.drawable.button_connecting);
-             }else
-             {
-                 holder.shareBtn.setTextColor(Color.BLACK);
-                 holder.shareBtn.setBackgroundResource(R.drawable.button_share);
-             }
-             
-             
-             holder.shareBtn.setOnClickListener(new OnClickListener() {
-                
-                @Override
-                public void onClick(View v) {
-                    int currentPos=(Integer) v.getTag();
-                    intent.putExtra(Intent.EXTRA_TEXT,
-                            dataList.get(currentPos).getSsid()+getResources().getString(R.string.wifi_psk_is)+dataList.get(currentPos).getPsk());  //内容 
-                    startActivity(Intent.createChooser(intent, getResources().getString(R.string.share_wifi_psk)));  //目标应用选择对话框的标题 
-//                   Toast.makeText(getApplicationContext(), currentPos+"", Toast.LENGTH_SHORT).show();
-                }
-            });
-             return convertView;
-        }
-        
-    }
-    static class ViewHolder{
-        TextView ssidTv,pskTv;
-        Button shareBtn;
-        View divider;
-  }
-    
+       
     
     /**
      * 按两次返回退出
