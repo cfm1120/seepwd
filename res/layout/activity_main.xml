@@ -5,7 +5,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_horizontal_margin"
     tools:context=".MainActivity"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@android:color/white" >
 
     <TextView
         android:id="@+id/tv"

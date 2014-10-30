@@ -1,5 +1,8 @@
 package com.sbstudio.seepwd.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,9 +17,6 @@ import android.widget.TextView;
 import com.sbstudio.seepwd.R;
 import com.sbstudio.seepwd.entity.Network;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class NetworkAdapter extends BaseAdapter{
 
     private List<Network> dataList;  
@@ -24,6 +24,10 @@ public class NetworkAdapter extends BaseAdapter{
     private LayoutInflater mLayoutInflater;  
     private Context mContext;
     private String connectingSsid;
+    
+    private int GREY=0xFF888888;
+    private int BLUE=0xFF03A9F4;
+    
     public NetworkAdapter(Context context,List<Network> arrayList) {  
         dataList = arrayList;  
         mLayoutInflater=LayoutInflater.from(context);
@@ -61,7 +65,7 @@ public class NetworkAdapter extends BaseAdapter{
              holder.ssidTv=(TextView) convertView.findViewById(R.id.ssidTv);
              holder.pskTv=(TextView) convertView.findViewById(R.id.pskTv);
              holder.shareBtn=(Button) convertView.findViewById(R.id.shareBtn);
-             holder.divider=convertView.findViewById(R.id.divider);
+//             holder.divider=convertView.findViewById(R.id.divider);
                 
                 convertView.setTag(holder) ;
          }
@@ -72,14 +76,16 @@ public class NetworkAdapter extends BaseAdapter{
          if(dataList.get(position).getPsk()==null)
          {
              holder.pskTv.setText(mContext.getResources().getString(R.string.nopwd));
+             holder.pskTv.setTextColor(GREY);
              holder.shareBtn.setVisibility(View.GONE);
-             holder.divider.setVisibility(View.GONE);
+//             holder.divider.setVisibility(View.GONE);
              
          }
          else {
              holder.pskTv.setText(dataList.get(position).getPsk());
+             holder.pskTv.setTextColor(Color.BLACK);
              holder.shareBtn.setVisibility(View.VISIBLE);
-             holder.divider.setVisibility(View.VISIBLE);
+//             holder.divider.setVisibility(View.VISIBLE);
          }
          
          //如果当前位置为正在连接的
@@ -87,10 +93,13 @@ public class NetworkAdapter extends BaseAdapter{
          {
              holder.shareBtn.setTextColor(Color.WHITE);
              holder.shareBtn.setBackgroundResource(R.drawable.button_connecting);
+             convertView.setBackgroundColor(Color.parseColor("#E7F4FA"));
+             holder.pskTv.setTextColor(BLUE);
          }else
          {
-             holder.shareBtn.setTextColor(Color.BLACK);
+             holder.shareBtn.setTextColor(BLUE);
              holder.shareBtn.setBackgroundResource(R.drawable.button_share);
+             convertView.setBackgroundColor(Color.WHITE);
          }
          
          
@@ -123,7 +132,7 @@ public class NetworkAdapter extends BaseAdapter{
 class ViewHolder{
     TextView ssidTv,pskTv;
     Button shareBtn;
-    View divider;
+//    View divider;
 }
 
 

@@ -390,17 +390,4 @@ public class MainActivity extends Activity {
         this.networkAdapter = networkAdapter;
     }
 
-
-    public ListView getLv() {
-        return lv;
-    }
-
-    public void setLv(ListView lv) {
-        this.lv = lv;
-    }
-    
-    
-
-    
-    
 }
