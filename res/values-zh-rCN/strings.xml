@@ -17,6 +17,9 @@
 	
 	<string name="recommend">推荐</string>
 	<string name="wx">微信</string>
+	<string name="show_hide">显示/隐藏</string>
+	<string name="show">无密码的WiFi已显示</string>
+	<string name="hide">无密码的WiFi已隐藏</string>
 	<string name="search">搜索</string>
 	<string name="queryHints">请输入WiFi名</string>
 	

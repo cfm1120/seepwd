@@ -1,6 +1,12 @@
 
 package com.sbstudio.seepwd;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,10 +20,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.SearchView.OnCloseListener;
-import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,11 +38,6 @@ import com.sbstudio.seepwd.util.http.Config;
 import com.sbstudio.seepwd.util.http.NetworkDetector;
 import com.sbstudio.seepwd.util.http.WeiXinUtils;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author water3
  *
@@ -49,7 +48,7 @@ public class MainActivity extends Activity {
     String out = null;
     TextView tv;
     private ListView lv;
-    private SearchView searchView;
+//    private SearchView searchView;
     private NetworkAdapter networkAdapter;
     Dialog alertDialog;
     
@@ -63,10 +62,12 @@ public class MainActivity extends Activity {
     
     ActionBar actionBar;
     WeiXinUtils wx;
+
+    public static List<Network> dataList;
+    
+    private List<Network> noPwdList;
     
 
-    //当前连接的wifi
-//    public String connectingSsid;
     //广播接收
     private NetworkConnectChangedReceiver receiver;
     
@@ -75,6 +76,8 @@ public class MainActivity extends Activity {
     boolean isShared;
     //是否捐赠了
 //    boolean isDonated;
+    
+    boolean isShown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +109,7 @@ public class MainActivity extends Activity {
         tv=(TextView) findViewById(R.id.tv);
         lv=(ListView) findViewById(R.id.networkLv);
         dataList=new ArrayList<Network>();
-        
+        noPwdList=new ArrayList<Network>();
 
         
         //获取root并得到wifi列表
@@ -143,6 +146,10 @@ public class MainActivity extends Activity {
                    tv.setVisibility(View.VISIBLE);//break;
                 }
                dataList=Parser.getNetworks(out);
+               	for (Network network : dataList) {
+       				if(network.getPsk()==null)
+       					noPwdList.add(network);//把无密码的网络保存起来
+                      }
                networkAdapter=new NetworkAdapter(this,dataList);
                lv.setAdapter(networkAdapter);
                //自动更新
@@ -290,7 +297,7 @@ public class MainActivity extends Activity {
 //        MenuItem add=menu.add(0,0,0,R.string.recommend).setIcon(R.drawable.wx);
 //        add.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         
-        searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        /*searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setQueryHint(getResources().getString(R.string.queryHints));
         searchView.setOnQueryTextListener(new OnQueryTextListener() {
             
@@ -314,11 +321,24 @@ public class MainActivity extends Activity {
                 Toast.makeText(getApplicationContext(), "closed~", Toast.LENGTH_SHORT).show();
                 return false;
             }
-        });
+        });*/
         
         return true;
     }
-    /***
+    
+    /**
+     * 打开菜单时，通过反射添加图标
+     */
+    @Override
+	public boolean onMenuOpened(int featureId, Menu menu) {
+		// TODO Auto-generated method stub
+    	setOverflowIconVisible(featureId, menu);
+    	
+		return super.onMenuOpened(featureId, menu);
+	}
+
+
+	/***
      * 菜单响应事件
      */
     @Override
@@ -339,6 +359,29 @@ public class MainActivity extends Activity {
                 //分享到朋友圈
                 wx.sendToWeiXin(1);
                 break;
+            case R.id.menu_show:
+            	if(getResources().getDrawable(R.drawable.ic_menu_view_no).getConstantState().equals(item.getIcon().getConstantState()))
+        		{
+            		////除了正在连接中的，显示其余无密码的
+            		for (Network net : noPwdList) {
+        				if(!net.getSsid().equals(networkAdapter.getConnectingSsid()))
+        					dataList.add(net);
+					}
+            		networkAdapter.notifyDataSetChanged();
+        			item.setIcon(android.R.drawable.ic_menu_view);
+        			Toast.makeText(getApplicationContext(), getResources().getString(R.string.show), Toast.LENGTH_SHORT).show();
+        		}else{
+        			//除了正在连接中的，隐藏其余无密码的
+        			for (Network net : noPwdList) {
+        				if(!net.getSsid().equals(networkAdapter.getConnectingSsid()))
+        					dataList.remove(net);
+					}
+        			networkAdapter.notifyDataSetChanged();
+        			item.setIcon(R.drawable.ic_menu_view_no);
+        			Toast.makeText(getApplicationContext(), getResources().getString(R.string.hide), Toast.LENGTH_SHORT).show();
+        		}
+            	
+            	break;
             default:
                 break;
         }
@@ -347,10 +390,6 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    public static List<Network> dataList;
-       
-    
     /**
      * 按两次返回退出
      */
@@ -383,6 +422,25 @@ public class MainActivity extends Activity {
     }
 
 
+    /**
+	* 利用反射让隐藏在Overflow中的MenuItem显示Icon图标
+	* @param featureId
+	* @param menu
+	* onMenuOpened方法中调用
+	*/
+	public static void setOverflowIconVisible(int featureId, Menu menu) {
+		if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {
+			if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+				try {
+					Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+					m.setAccessible(true);
+					m.invoke(menu, true);
+				} catch (Exception e) {
+				}
+			}
+		}
+	}
+    
     public NetworkAdapter getNetworkAdapter() {
         return networkAdapter;
     }

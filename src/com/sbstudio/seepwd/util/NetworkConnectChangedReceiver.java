@@ -63,7 +63,7 @@ public class NetworkConnectChangedReceiver extends BroadcastReceiver {
                         {
                             //先把正在连接的删掉，再加到List合适的位置
                             MainActivity.dataList.remove(network);
-                            int perfectPos=4;
+                            int perfectPos=0;
                             MainActivity.dataList.add(perfectPos, network);
                             break;
                         }

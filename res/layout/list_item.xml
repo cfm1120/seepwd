@@ -2,21 +2,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     tools:context=".MainActivity" >
 
     <TextView
         android:id="@+id/ssidTv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textColor="#888"
+        android:layout_marginTop="5dp"
         />
     <TextView
         android:id="@+id/pskTv"
         android:layout_below="@+id/ssidTv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
+        android:paddingBottom="5dp"
          />
 	<!-- <View  
 	    android:id="@+id/divider"
@@ -30,13 +33,12 @@
     <Button
         android:id="@+id/shareBtn"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:textSize="19sp"
         android:text="@string/share"
-        android:layout_centerVertical="true"
         android:background="@drawable/button_share"
-        android:scaleY="1.08"
-        
+        android:padding="18dp"
          />
 </RelativeLayout>

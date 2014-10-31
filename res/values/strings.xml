@@ -17,6 +17,9 @@
 	
 	<string name="recommend">Recommend</string>
 	<string name="wx">WeChat</string>
+	<string name="show_hide">Show/Hide</string>
+	<string name="show">No password WiFi shown</string>
+	<string name="hide">No password WiFi hidden</string>
 	<string name="search">Search</string>
 	<string name="queryHints">Pls input WiFi name</string>
 	

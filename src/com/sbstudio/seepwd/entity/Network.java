@@ -4,7 +4,7 @@ package com.sbstudio.seepwd.entity;
  * @author water3
  * 网络连接实体
  */
-public class Network {
+public class Network implements Comparable<Network>{
 
     private String ssid;
     private String psk;
@@ -27,6 +27,14 @@ public class Network {
     public void setSecurity(String security) {
         this.security = security;
     }
+	@Override
+	public int compareTo(Network another) {
+		if(psk!=null&&another.psk==null)
+			return -1;
+		if(psk==null&&another.psk!=null)
+			return 1;
+		return 0;
+	}
     
     
     

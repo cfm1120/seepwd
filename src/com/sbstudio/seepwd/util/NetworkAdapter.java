@@ -1,6 +1,5 @@
 package com.sbstudio.seepwd.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -20,7 +19,7 @@ import com.sbstudio.seepwd.entity.Network;
 public class NetworkAdapter extends BaseAdapter{
 
     private List<Network> dataList;  
-    private List<Network> mFilteredArrayList;  
+//    private List<Network> mFilteredArrayList;  
     private LayoutInflater mLayoutInflater;  
     private Context mContext;
     private String connectingSsid;
@@ -32,7 +31,7 @@ public class NetworkAdapter extends BaseAdapter{
         dataList = arrayList;  
         mLayoutInflater=LayoutInflater.from(context);
         mContext=context;
-        mFilteredArrayList=new ArrayList<Network>();  
+//        mFilteredArrayList=new ArrayList<Network>();  
     }  
     @Override
     public int getCount() {

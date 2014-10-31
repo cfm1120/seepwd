@@ -4,6 +4,7 @@ import com.sbstudio.seepwd.entity.Network;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,9 +26,10 @@ public class Parser {
     
     /**
      * @param args
+     * @throws UnsupportedEncodingException 
      */
-    public static void main(String[] args) {
-        List<Network> wifis=getNetworks(wpaString);
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        List<Network> wifis=getNetworks(new String(wpaString.getBytes("ISO-8859-1"),"UTF-8"));
         for (Network network : wifis) {
             System.out.println(network.getSsid()+" "+network.getPsk());
         }
@@ -35,19 +37,24 @@ public class Parser {
     }
 
     public static List<Network> getNetworks(String wpaString){
-        Matcher matcher = NETWORK.matcher(wpaString);
+        Matcher matcher=null;
+		try {
+			matcher = NETWORK.matcher(new String(wpaString.getBytes("ISO-8859-1"),"UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
         List<Network> netList = new ArrayList<Network>();
         while (true)
         {
           if (!matcher.find())
-            return netList;
+          {
+        	  Collections.sort(netList);
+        	  return netList;
+          }
           Network network = new Network();
-          try {
-            network.setSsid(new String(matcher.group(1).getBytes("ISO-8859-1"),"UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+            network.setSsid(matcher.group(1));
           network.setPsk(matcher.group(3));
+
           netList.add(network);
         }
     }
