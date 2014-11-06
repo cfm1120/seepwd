@@ -2,6 +2,7 @@ package com.sbstudio.seepwd.util.http;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
@@ -10,7 +11,7 @@ import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.SendMessageToWX;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.tencent.mm.sdk.openapi.WXMediaMessage;
-import com.tencent.mm.sdk.openapi.WXTextObject;
+import com.tencent.mm.sdk.openapi.WXWebpageObject;
 
 import java.io.ByteArrayOutputStream;
 
@@ -45,30 +46,31 @@ public class WeiXinUtils{
         
         
         //test start
-//        String url = "http://t.cn/8FtmGTS";//收到分享的好友点击信息会跳转到这个地址去
-//        WXWebpageObject localWXWebpageObject = new WXWebpageObject();
-//        localWXWebpageObject.webpageUrl = url;
-//        WXMediaMessage msg = new WXMediaMessage(localWXWebpageObject);
-//        
-//        msg.title = context.getString(R.string.text);//不能太长，否则微信会提示出错。不过博主没验证过具体能输入多长。
-//        msg.description = context.getString(R.string.text);
-//        msg.thumbData = getBitmapBytes(BitmapFactory.decodeResource(context.getResources(), R.drawable.share_pic), false);
-//        
-//        req = new SendMessageToWX.Req();
-//        req.transaction = System.currentTimeMillis() + "";
-//        req.message = msg;
+        String url = Config.MARKET;//收到分享的好友点击信息会跳转到这个地址去
+        WXWebpageObject localWXWebpageObject = new WXWebpageObject();
+        localWXWebpageObject.webpageUrl = url;
+        WXMediaMessage msg = new WXMediaMessage(localWXWebpageObject);
         
-        //test end
-        WXTextObject textObject = new WXTextObject();
-        textObject.text = context.getString(R.string.text);//内容
-        
-        WXMediaMessage  msg = new WXMediaMessage();
-        msg.mediaObject = textObject;
-        msg.description = context.getString(R.string.description);//描述
+        msg.title = context.getString(R.string.text);//不能太长，否则微信会提示出错。不过博主没验证过具体能输入多长。
+        msg.description = context.getString(R.string.description);
+//        msg.thumbData = getBitmapBytes(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher), false);
+        msg.thumbData = Bitmap2Bytes(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher));
         
         req = new SendMessageToWX.Req();
-        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.transaction = System.currentTimeMillis() + "";
         req.message = msg;
+        
+        //test end
+//        WXTextObject textObject = new WXTextObject();
+//        textObject.text = context.getString(R.string.text);//内容
+//        
+//        WXMediaMessage  msg = new WXMediaMessage();
+//        msg.mediaObject = textObject;
+//        msg.description = context.getString(R.string.description);//描述
+//        
+//        req = new SendMessageToWX.Req();
+//        req.transaction = String.valueOf(System.currentTimeMillis());
+//        req.message = msg;
         
     }
     /**
@@ -115,5 +117,10 @@ public class WeiXinUtils{
             i = bitmap.getHeight();
             j = bitmap.getHeight();
         }
+    }
+    private static byte[] Bitmap2Bytes(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
     }
 }

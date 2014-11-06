@@ -9,9 +9,10 @@ public class Config {
 	
 	/** 版本和apk地址 **/
 	public final static String SERVER="http://wbean.sinaapp.com/seepwd/";
-	
+	/** 市场url **/
+	public final static String MARKET="http://t.cn/8FtmGTS";
 	/** 是否显示广告 **/
-	public static boolean AD=true;
+	public static boolean AD=false;
 	
 	public final static String APP_ID="wx9265b0a90e9d63fd";
 	

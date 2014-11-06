@@ -24,7 +24,7 @@
 	<string name="queryHints">请输入WiFi名</string>
 	
 	<string name="description">分享到朋友圈可以去广告我会乱说吗？</string>
-	<string name="text">还记得大明湖畔你上过的WiFi吗？本安卓app可以查看手机连接过的WiFi密码并分享。过年串门，妈妈再也不用担心熊孩子问WiFi密码了！</string>
+	<string name="text">还记得大明湖畔你上过的WiFi吗？本app可以查看手机连接过的WiFi密码并分享</string>
 	<string name="share_success">分享成功,重新打开看弹屏广告木有了T_T</string>
 	<string name="share_fail">分享失败,咋回事捏</string>
 	<string name="donate_success">感谢土豪的支持，广告彻底木有了!</string>

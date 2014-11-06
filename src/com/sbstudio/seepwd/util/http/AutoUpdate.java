@@ -42,7 +42,7 @@ public class AutoUpdate
     private String serverAddress =Config.SERVER;
     
 	// 软件版本
-    public static final String softVersion = "1.01";
+    public static final String softVersion = "1.02";
     
     // 获取系统最新版本号的url地址
     private String versionUrl = "version.html";
